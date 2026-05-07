@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum FileStatus {
+  PENDING
+  UPLOADED
+}
+
+model File {
+  id        String     @id @default(uuid())
+  folderId  String     @map("folder_id")
+  filename  String
+  mimeType  String     @map("mime_type")
+  size      Int
+  status    FileStatus @default(PENDING)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@map("files")
+}
